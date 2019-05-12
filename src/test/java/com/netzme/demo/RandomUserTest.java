@@ -1,36 +1,30 @@
 package com.netzme.demo;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertNotNull;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
-import java.net.URI;
+import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.catalina.mapper.Mapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.client.ExpectedCount;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -48,13 +42,26 @@ public class RandomUserTest {
 		mapper = new ObjectMapper();
 	}
 	
+	//Positive Test
 	@Test
-	public void getResponseWhenHitEndpointPerson() {
+	public void getResponseWhenHitEndpointPerson() throws IOException {
+		String dataKey[] = {"gender", "fullname", "address", "picture"};
+		
 		Retrofit retrofit = new Retrofit.Builder()
-				.baseUrl("http://localhost:8080/api/person")
+				.baseUrl(PersonAPITest.BASE_URL)
 				.addConverterFactory(GsonConverterFactory.create())
 				.build();
-		Call<Map<String, String>> callResponse = (Call<Map<String, String>>) retrofit.create(Map.class); 
+		PersonAPITest callRequest = retrofit.create(PersonAPITest.class);
+		LinkedHashMap<String, String> response = callRequest.getPerson().execute().body();
+		
+		assertNotNull(response);
+		assertThat(response.isEmpty(), equalTo(false));
+		assertThat(response.size(), equalTo(dataKey.length));
+		
+		int i = 0;
+		for (String key : response.keySet()) {
+			assertThat(key, equalTo(dataKey[i++]));
+		}
 	}
 	
 	

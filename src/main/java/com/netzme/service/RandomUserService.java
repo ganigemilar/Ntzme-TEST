@@ -35,10 +35,9 @@ public class RandomUserService implements IRandomUserService {
 	@Override
 	public Map<String, String> getGeneralInfoRandomUser() throws Exception {
 		RandomUser randomUser = fetchRandomUser();
+		Map<String, String> data = new LinkedHashMap<>();
 
 		if (randomUser != null) {
-			Map<String, String> data = new LinkedHashMap<>();
-
 			Result resultUser = null;
 			Name nameUser = null;
 			Location locationUser = null;
@@ -60,6 +59,6 @@ public class RandomUserService implements IRandomUserService {
 			}
 			return data;
 		}
-		return null;
+		return data;
 	}
 }
