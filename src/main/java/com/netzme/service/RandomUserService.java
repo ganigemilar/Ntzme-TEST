@@ -49,16 +49,11 @@ public class RandomUserService implements IRandomUserService {
 			pictureUser = resultUser.getPicture();
 
 			data.put("gender", resultUser.getGender());
-			data.put("fullname", String.format("%s, %s %s", nameUser.getTitle(), nameUser.getFirst(), nameUser.getLast()));
+			data.put("fullname", String.format("%s %s %s", nameUser.getTitle(), nameUser.getFirst(), nameUser.getLast()));
 			data.put("address", String.format("%s %s", locationUser.getStreet(), locationUser.getCity()));
 			data.put("picture", pictureUser.getLarge());
-
-			// Test
-			for (String s : data.keySet()) {
-				System.out.println(String.format("%s\t : %s", s, data.get(s)));
-			}
-			return data;
 		}
+		
 		return data;
 	}
 }
