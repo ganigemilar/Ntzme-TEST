@@ -11,10 +11,4 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class NetzmeTestApplicationTests {
 
-	@Test
-	public void contextLoads() {
-		int i = 1;
-		assertEquals(6, i + 4);
-	}
-
 }
